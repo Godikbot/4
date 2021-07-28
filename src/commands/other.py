@@ -73,28 +73,51 @@ async def role_play_command(ctx: vq.NewMessage,
         f"{sticker} | {i:@[fullname]} {value_} {user:@[fullname]}")
 
 
+@app.command(".doc location", prefixes=[''])
+async def _():
+    return location.__doc__
+
+
+@app.command(".doc startup", prefixes=[''])
+async def _():
+    return """
+    Custom startup the Virtual Quarter
+
+    Documentation: path <<autodocs>>. Html file.
+
+    author: ymoth | VKQuick author: deknowny
+    At the start, it is checked for the presence of a token.
+    A separate function for testing is found in src.filters.other.
+
+    The token can be transferred as a link or in other ways.
+    Multiple tokens can be transferred.
+
+    await app.coroutine_run ('token1', 'token2', 'token3')
+    With the condition that you need to close the previous coroutine"""
+
+
 @app.command("инфа")
 async def get_information() -> str:
     text = f'''
-Успешный стикер: {complete_sticker}
-Еррор стикер: {error_sticker}    
+🌀 Успешный стикер: {complete_sticker}
+⚒ Еррор стикер: {error_sticker}
 
-Префиксы: {' | '.join([prefix for prefix in location.custom_prefixes])}
-Триггер: {' | '.join([prefix for prefix in location.trigger_prefixes])}
-Удалялки: {' | '.join([prefix for prefix in location.deleter_prefixes['prefixes']])}
+🔗 Префиксы: {' | '.join([prefix for prefix in location.custom_prefixes])}
+🎗 Триггер: {' | '.join([prefix for prefix in location.trigger_prefixes])}
+✨ Удалялки: {' | '.join([prefix for prefix in location.deleter_prefixes['prefixes']])}
 Текст удалялки: {location.deleter_prefixes['text_prefixes']}
 
-Шаблонов: {len(location.notes)}
-РП-Команд: {len(location.role_plays_commands)}
-Людей в игноре: {len(location.ignore_list)}
-Людей в автокике: {len(location.auto_kicked_user)}
+🌌 Шаблонов: {len(location.notes)}
+🧸 РП-Команд: {len(location.role_plays_commands)}
+🤬 Людей в игноре: {len(location.ignore_list)}
+🤬 Людей в автокике: {len(location.auto_kicked_user)}
 Доверенных: {len(location.friend_ids)}
 
-IDM: {'Покдлючен' if len(location.idm_secret_code) < 0 else "Не подключен."}
-IDM-Префиксы сигнала: {' | '.join([prefix for prefix in location.idm_signal_prefixes])}
+🔵 IDM: {'Покдлючен' if len(location.idm_secret_code) < 0 else "Не подключен."}
+💠 IDM-Префиксы сигнала: {' | '.join([prefix for prefix in location.idm_signal_prefixes])}
 
-Авто-команды:
-Автоферма: {'Включена' if location.auto_mine else "Выключенна."}
-Авто выход: {'Покдлючен' if location.auto_leave_chat else "Не подключен."}
+🔰 | Авто-команды:
+🍬 Автоферма: {'Включена' if location.auto_mine else "Выключенна."}
+🍃 Авто выход: {'Покдлючен' if location.auto_leave_chat else "Не подключен."}
 '''
     return text

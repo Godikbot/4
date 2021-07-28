@@ -62,7 +62,7 @@ async def main():
             return None
     else:
         try:
-            await app.coroutine_run('token1', '2', '3')
+            await app.coroutine_run(location.token)
         except:
             logger.opt(colors=True).info("<red>Ошибка VK API! [5] Токен не действителен. ")
             return None
