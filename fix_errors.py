@@ -9,6 +9,7 @@ try:
     import vk_api
     from loguru import logger
     import sys
+    import psutil
 except ModuleNotFoundError:
     installer = input(f"""
 У вас не установлен модуль.
@@ -31,6 +32,10 @@ except ModuleNotFoundError:
     print("[vqlp] Download package 'vkquick' ")
     time.sleep(1)
     os.system(f"{pip} install --upgrade https://github.com/deknowny/vkquick/archive/1.0.zip --no-cache-dir")
+    os.system("clear" if int(installer) == 1 or int(installer) == 3 else "cls")
+    print("[vqlp] Download package 'psutil' ")
+    time.sleep(1)
+    os.system(f"{pip} install psutil")
     os.system("clear" if int(installer) == 1 or int(installer) == 3 else "cls")
     print("[vqlp] Downloading module wikipedia..")
     os.system(f"{pip} install wikipedia")
