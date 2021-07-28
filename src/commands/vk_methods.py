@@ -80,3 +80,50 @@ async def get_chat(ctx: vq.NewMessage):
                    f"💡 Название чата : {chat['title']}\n"
                    f"{complete_sticker} Количество участников : {chat['members_count']}\n"
                    f"⚠ Айди чата : {chat['id']}")
+
+@app.command("кик")
+async def chat(ctx: vq.NewMessage, user: vq.User):
+    try:
+        method = await ctx.api.messages.removeChatUser(chat_id=ctx.msg.chat_id, user_id=user.id)
+        await ctx.edit( f"{complete_sticker} Исключение")
+        if method == 1:
+            await ctx.edit( f"{complete_sticker} Пользователь {user:@[fullname]} исключен из беседы.")
+    except vq.APIError[vq.CODE_925_MESSAGES_CHAT_NOT_ADMIN]:
+        await ctx.edit( f"{error_sticker} Нет доступа.")
+    except vq.APIError[vq.CODE_935_MESSAGES_CHAT_USER_NOT_IN_CHAT]:
+        await ctx.edit( f"{error_sticker} Пользователя нету в беседе.")
+    except vq.APIError[vq.CODE_945_MESSAGES_CHAT_DISABLED]:
+        await ctx.edit( f"{error_sticker} MESSAGES_CHAT_DISABLED")
+    except vq.APIError[vq.CODE_946_MESSAGES_CHAT_UNSUPPORTED]:
+        await ctx.edit( f"{error_sticker} MESSAGES_CHAT_UNSUPPORTED")
+    except vq.APIError[vq.CODE_15_ACCESS]:
+        await ctx.edit( f"{error_sticker} Нет доступа.")
+
+@app.command("добавить")
+async def chat(ctx: vq.NewMessage , user: vq.User):
+    try:
+        method = await ctx.api.messages.addChatUser(
+            chat_id=ctx.msg.chat_id,
+            user_id=user.id
+        )
+        await ctx.edit(f"{complete_sticker} Добавляю пользователя {user:@[fullname]}")
+        if method == 1:
+            await ctx.edit(f"{complete_sticker} ✅Пользователь {user:@[fullname]} добавлен.")
+    except vq.APIError[vq.CODE_925_MESSAGES_CHAT_NOT_ADMIN]:
+        await ctx.edit(f"{error_sticker} You are not admin of this chat")
+    except vq.APIError[vq.CODE_932_MESSAGES_GROUP_PEER_ACCESS]:
+        await ctx.edit(f"{error_sticker} Your community can't interact with this peer")
+    except vq.APIError[vq.CODE_947_MESSAGES_MEMBER_ACCESS_TO_GROUP_DENIED]:
+        await ctx.edit(f"{error_sticker} Can't add user to chat, because user has no access to group")
+    except vq.APIError[vq.CODE_15_ACCESS]:
+        await ctx.edit(f"{error_sticker} Access denied: can't add this user")
+        
+@app.command("репорт")
+async def report(ctx: vq.NewMessage , user: vq.User):
+    method = await ctx.api.users.report(
+        user_id=user.id,
+        type='spam'
+    )
+    await ctx.edit("✅Выполнение...")
+    if method == 1:
+        await ctx.edit(f"{complete_sticker} Жалоба на пользователя {user:@[fullname]} была успешно отправлена на модерацию.")
