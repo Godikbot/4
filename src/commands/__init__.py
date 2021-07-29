@@ -5,3 +5,4 @@ from .other import *
 from .on_messages import *
 from .idm import *
 from .lists import *
+from .qiwi_vqlp import *
