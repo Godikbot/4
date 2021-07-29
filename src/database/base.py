@@ -72,6 +72,7 @@ class Location:
                 self.auto_mine = keys['auto_commands']["auto_mine"]
                 self.auto_commands = keys['auto_commands']
                 self.idm = keys['IDM']
+                self.qiwi_key = keys["qiwi_key"] if len(keys["qiwi_key"]) > 0 else "6gs281"
             except:
                 ...
 
@@ -95,6 +96,7 @@ class Location:
             self.auto_mine = keys['auto_commands']["auto_mine"]
             self.auto_commands = keys['auto_commands']
             self.idm = keys['IDM']
+            self.qiwi_key = keys["qiwi_key"] if len(keys["qiwi_key"]) > 0 else "6gs281" 
 
     @staticmethod
     def add_object_the_database(method: ty.Optional[str], value: ty.Any):
