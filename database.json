@@ -1,9 +1,11 @@
 {
    "token": "",
+   "qiwi_key": "",
    "deleter_prefixes": {
       "prefixes": [
          "мур",
-         "123"
+         "123",
+         "дд"
       ],
       "text_prefixes": "Удаляю сообщения."
    },
