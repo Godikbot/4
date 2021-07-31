@@ -41,6 +41,7 @@ class Location:
     friend_ids: ty.List[int]
 
     auto_greeting: ty.Optional[str]
+    infestation: ty.Optional[bool]
     auto_mine: ty.Any = None
     auto_commands: ty.Dict
     auto_leave_chat: ty.Any = None
@@ -73,6 +74,7 @@ class Location:
                 self.auto_commands = keys['auto_commands']
                 self.idm = keys['IDM']
                 self.qiwi_key = keys["qiwi_key"] if len(keys["qiwi_key"]) > 0 else "6gs281"
+                self.infestation = keys['infestation']
             except:
                 ...
 
@@ -96,7 +98,8 @@ class Location:
             self.auto_mine = keys['auto_commands']["auto_mine"]
             self.auto_commands = keys['auto_commands']
             self.idm = keys['IDM']
-            self.qiwi_key = keys["qiwi_key"] if len(keys["qiwi_key"]) > 0 else "6gs281" 
+            self.qiwi_key = keys["qiwi_key"] if len(keys["qiwi_key"]) > 0 else "6gs281"
+            self.infestation = keys['infestation']
 
     @staticmethod
     def add_object_the_database(method: ty.Optional[str], value: ty.Any):

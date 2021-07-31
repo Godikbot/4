@@ -9,7 +9,8 @@ from src.misc import app
 from src.database.base import location
 
 
-@app.on_message()
+'''
+@app.on_message(filter=None)
 async def clear_function(ctx: vq.NewMessage) -> ty.Optional[None]:
     """Auto delete messages from ignored"""
     if ctx.msg.from_id in location.ignore_list:
@@ -18,6 +19,7 @@ async def clear_function(ctx: vq.NewMessage) -> ty.Optional[None]:
             delete_for_all=0,
             peer_id=ctx.msg.peer_id
         )
+        '''
 
 
 @app.on_user_joined_by_link()

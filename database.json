@@ -1,6 +1,7 @@
 {
    "token": "",
    "qiwi_key": "",
+   "infestation": false,
    "deleter_prefixes": {
       "prefixes": [
          "мур",
