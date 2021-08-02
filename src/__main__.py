@@ -9,12 +9,13 @@ VKGroup: https://vk.com/vqlongpoll
 """
 
 import asyncio
+import json
 import sys
 
 from loguru import logger
 
 from src.database.base import location
-from src.filters.other import check_access_token
+from src.filters.other import check_access_token, AutoCommands
 from src.misc import app
 
 logger.add(sys.stdout,
@@ -62,6 +63,10 @@ async def main():
             return None
     else:
         try:
+            if location.auto_mine:
+                ac = AutoCommands()
+                asyncio.create_task(ac.auto_mine_for_user())
+                logger.info("Автоферма запущена.")
             await app.coroutine_run(location.token)
         except:
             logger.opt(colors=True).info("<red>Ошибка VK API! [5] Токен не действителен. ")

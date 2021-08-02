@@ -3,11 +3,13 @@ import typing as ty
 
 import vkquick as vq
 
+from src.filters.only_me import OnlyMe
 from src.misc import app
 
-from src.database.base import location
+from src.database.base import location, Location
 from src.config import error_sticker, complete_sticker
 from src.filters.error_handler import ErrorHandler
+from src.filters.other import AutoCommands
 
 description_greeting = f"""
 Авто-приветствие
@@ -17,15 +19,44 @@ description_greeting = f"""
 Text: {location.auto_greeting['text']} Value: {location.auto_greeting['value']}
 """
 
+ac = AutoCommands()
 
-@app.command("удалялка", invalid_argument_config=ErrorHandler())
+
+@app.command("+автоферма", filter=OnlyMe())
+async def add_auto_mine():
+    location = Location()
+    if location.auto_mine:
+        return f"{error_sticker} У вас уже включенна автоферма."
+
+    location.add_object_the_database(method='auto_commands', value={
+        "auto_mine": True,
+        "auto_leave_chat": location.auto_leave_chat
+    })
+    asyncio.create_task(ac.auto_mine_for_user())
+    return f"{complete_sticker} Вы включили автоферму."
+
+
+@app.command("-автоферма", filter=OnlyMe())
+async def add_auto_mine():
+    location = Location()
+    if not location.auto_mine:
+        return f"{error_sticker} У вас уже выключенна автоферма."
+
+    location.add_object_the_database(method='auto_commands', value={
+        "auto_mine": False,
+        "auto_leave_chat": location.auto_leave_chat
+    })
+    return f"{complete_sticker} Вы выключили автоферму."
+
+
+@app.command("удалялка", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_edit(*, data: str) -> ty.Optional[str]:
     location.add_object_the_database(value={"prefixes": location.deleter_prefixes['prefixes'],
                                             "text_prefixes": data}, method="deleter_prefixes")
     return f"{complete_sticker} Удалялка изменена на <<{data}>>"
 
 
-@app.command("+дпрефикс", invalid_argument_config=ErrorHandler())
+@app.command("+дпрефикс", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_prefix(
         new_prefix: str):
     if new_prefix.strip() in location.trigger_prefixes:
@@ -36,7 +67,7 @@ async def add_prefix(
     return f"""{complete_sticker} Создан новый дпрефикс <<{new_prefix}>>."""
 
 
-@app.command("-дпрефикс", invalid_argument_config=ErrorHandler())
+@app.command("-дпрефикс", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_prefix(
         old_prefix: str):
     if old_prefix not in location.trigger_prefixes:
@@ -47,7 +78,7 @@ async def add_prefix(
     return f"""{complete_sticker} Удалён дпрефикс <<{old_prefix}>>."""
 
 
-@app.command("+дов", "вдов", invalid_argument_config=ErrorHandler())
+@app.command("+дов", "вдов", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_friend(
         user: vq.User
 ) -> ty.Optional[str]:
@@ -59,7 +90,7 @@ async def add_friend(
     return f"{complete_sticker} Пользователь {user:@[fullname]} успешно добавлен в довы."
 
 
-@app.command("-дов", "издов", invalid_argument_config=ErrorHandler())
+@app.command("-дов", "издов", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_friend(
         user: vq.User
 ) -> ty.Optional[str]:
@@ -71,7 +102,7 @@ async def add_friend(
     return f"{complete_sticker} Пользователь {user:@[fullname]} успешно убран из доверенных."
 
 
-@app.command("+автокик", "в автокик", invalid_argument_config=ErrorHandler())
+@app.command("+автокик", "в автокик", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_to_auto_kick_user(user: vq.User) -> ty.Optional[str]:
     if user.id in location.auto_kicked_user:
         return f"{error_sticker} Пользователь уже в авто-кике"
@@ -81,7 +112,7 @@ async def add_to_auto_kick_user(user: vq.User) -> ty.Optional[str]:
     return f"{complete_sticker} {user:@[fullname]} Успешно добавлен в список авто-кика"
 
 
-@app.command("-автокик", "из автокика", invalid_argument_config=ErrorHandler())
+@app.command("-автокик", "из автокика", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_to_auto_kick_user(user: vq.User) -> ty.Optional[str]:
     if user.id not in location.auto_kicked_user:
         return f"{error_sticker} Пользователя нет в списке авто-кика"
@@ -91,19 +122,19 @@ async def add_to_auto_kick_user(user: vq.User) -> ty.Optional[str]:
     return f"{complete_sticker} {user:@[fullname]} Успешно убран из списка авто-кика"
 
 
-@app.command("+приветствие", invalid_argument_config=ErrorHandler(), description=description_greeting)
+@app.command("+приветствие", invalid_argument_config=ErrorHandler(), description=description_greeting, filter=OnlyMe())
 async def add_greeting(*, text: str) -> ty.Optional[str]:
     location.add_object_the_database(value={'value': True, "text": text})
     return f"{complete_sticker} | Успешно включено приветствие, текст: {text}"
 
 
-@app.command("-приветствие", invalid_argument_config=ErrorHandler())
+@app.command("-приветствие", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def delete_greeting() -> ty.Optional[str]:
     location.add_object_the_database(value={'value': False, "text": 'Close.'})
     return f"{complete_sticker} | Успешно выключено приветствие"
 
 
-@app.command("+шаб", "+шаблон", invalid_argument_config=ErrorHandler())
+@app.command("+шаб", "+шаблон", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_note(
         ctx: vq.NewMessage,
         name: str,
@@ -136,7 +167,7 @@ async def add_note(
     await ctx.edit(f"Вы успешно создали шаблон. Длина символов: {len(text)} | Вложений: {len(attachments_all)}")
 
 
-@app.command("-шаб", '-шаблон', invalid_argument_config=ErrorHandler())
+@app.command("-шаб", '-шаблон', invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def delete_note(name: str) -> ty.Optional[str]:
     base: list = [note['name_note'] for note in location.notes]
     if name not in base:
@@ -158,7 +189,7 @@ async def add_for_ignore_user(user: vq.User) -> str:
     return f"{complete_sticker} Пользователь {user:@[fullname]} был добавлен в игнор-лист"
 
 
-@app.command("-игнор")
+@app.command("-игнор", filter=OnlyMe())
 async def add_for_ignore_user(user: vq.User) -> str:
     if user.id not in location.ignore_list:
         return f"{error_sticker} Ошибка. Данного пользователя нет в игнор листе."
@@ -168,7 +199,7 @@ async def add_for_ignore_user(user: vq.User) -> str:
     return f"{complete_sticker} Пользователь {user:@[fullname]} был убран из игнор-листа"
 
 
-@app.command("+префикс", invalid_argument_config=ErrorHandler())
+@app.command("+префикс", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_prefix(
         new_prefix: str):
     if new_prefix.strip() + ' ' in location.custom_prefixes:
@@ -179,7 +210,7 @@ async def add_prefix(
     return f"""{complete_sticker} Создан новый префикс <<{new_prefix}>>."""
 
 
-@app.command("-префикс", invalid_argument_config=ErrorHandler())
+@app.command("-префикс", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_prefix(
         old_prefix: str):
     if old_prefix + ' ' not in location.custom_prefixes:
@@ -191,7 +222,7 @@ async def add_prefix(
 
 
 @app.command("+рп", 'добавить рп', invalid_argument_config=ErrorHandler(),
-             description="+рп название стикер действие")
+             description="+рп название стикер действие", filter=OnlyMe())
 async def add_role_play(
         name_rp: str, sticker: str,
         *, value: str) -> str:
@@ -209,7 +240,8 @@ async def add_role_play(
     return f"{complete_sticker} Вы создали рп команду <<{name_rp}>>"
 
 
-@app.command("-рп", 'удалить рп', invalid_argument_config=ErrorHandler(), description="+рп название стикер действие")
+@app.command("-рп", 'удалить рп', filter=OnlyMe(), invalid_argument_config=ErrorHandler(),
+             description="+рп название стикер действие")
 async def delete_role_play(name_rp: str) -> str:
     roles = [role['name'] for role in location.role_plays_commands]
     if name_rp.strip() not in roles:
@@ -224,7 +256,7 @@ async def delete_role_play(name_rp: str) -> str:
     return f"{complete_sticker} Вы удалили рп команду <<{name_rp}>>"
 
 
-@app.command("+удалялка", invalid_argument_config=ErrorHandler())
+@app.command("+удалялка", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_deleter(*, new_prefix: str):
     """Added new prefix for delete messages"""
     prefixes: list = location.deleter_prefixes['prefixes']
@@ -241,7 +273,7 @@ async def add_deleter(*, new_prefix: str):
            f"Сработает после перезапуска."
 
 
-@app.command("-удалялка", invalid_argument_config=ErrorHandler())
+@app.command("-удалялка", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def delete_deleter(*, old_prefix: str):
     """Added new prefix for delete messages"""
     prefixes: list = location.deleter_prefixes['prefixes']
@@ -258,7 +290,8 @@ async def delete_deleter(*, old_prefix: str):
            f"Сработает после перезапуска."
 
 
-@app.command(*location.deleter_prefixes['prefixes'], prefixes=[''], invalid_argument_config=ErrorHandler())
+@app.command(*location.deleter_prefixes['prefixes'], prefixes=[''], invalid_argument_config=ErrorHandler(),
+             filter=OnlyMe())
 async def delete_last_messages(
         ctx: vq.NewMessage, how_much: ty.Optional[str]) -> None:
     if not how_much:

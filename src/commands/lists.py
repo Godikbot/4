@@ -1,12 +1,13 @@
 import vkquick as vq
 
+from src.filters.only_me import OnlyMe
 from src.misc import app
 
 from src.database.base import location
 from src.config import complete_sticker
 
 
-@app.command("рпшки")
+@app.command("рпшки", filter=OnlyMe())
 async def role_play_commands_get():
     """Get list for location.role_plays_commands"""
     text = f"""
@@ -18,7 +19,7 @@ async def role_play_commands_get():
     return text
 
 
-@app.command("мут лист", "в муте")
+@app.command("мут лист", "в муте", filter=OnlyMe())
 async def _(ctx: vq.NewMessage):
     text = []
     cul = 1
@@ -30,7 +31,7 @@ async def _(ctx: vq.NewMessage):
     return f"{complete_sticker} Пользователи в муте: \n{' '.join(text)}"
 
 
-@app.command("автокик лист", "в автокике")
+@app.command("автокик лист", "в автокике", filter=OnlyMe())
 async def _(ctx: vq.NewMessage):
     text = []
     cul = 0
@@ -42,7 +43,7 @@ async def _(ctx: vq.NewMessage):
     return f"{complete_sticker} Автокик пользователи: \n{' '.join(text)}"
 
 
-@app.command("шабы", "шаблоны")
+@app.command("шабы", "шаблоны", filter=OnlyMe())
 async def _():
     text = []
     cul = 0
@@ -52,7 +53,7 @@ async def _():
     return f"{complete_sticker} Шаблоны: \n{' '.join(text)}"
 
 
-@app.command("игнор лист", "игнорируемы")
+@app.command("игнор лист", "игнорируемы", filter=OnlyMe())
 async def _(ctx: vq.NewMessage):
     text = []
     cul = 0
@@ -64,7 +65,7 @@ async def _(ctx: vq.NewMessage):
     return f"{complete_sticker} Игнорируемые пользователи: \n{' '.join(text)}"
 
 
-@app.command("дов лист", "довы")
+@app.command("дов лист", "довы", filter=OnlyMe())
 async def _(ctx: vq.NewMessage):
     text = []
     cul = 0

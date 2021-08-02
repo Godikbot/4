@@ -3,11 +3,10 @@ import typing as ty
 import vkquick as vq
 
 from src.filters.error_handler import ErrorHandler
-from src.filters.none_class import Clear
+from src.filters.none_class import FromFriend
 from src.misc import app
 
 from src.database.base import location
-
 
 '''
 @app.on_message(filter=None)
@@ -43,7 +42,6 @@ async def added(ctx: vq.NewMessage, invite: vq.UserID):
 
 
 @app.command('повтори', prefixes=location.trigger_prefixes,
-             invalid_argument_config=ErrorHandler(), filter=None)
+             filter=FromFriend(), invalid_argument_config=ErrorHandler(), )
 async def hello_(ctx: vq.NewMessage, *, message: str):
-    if ctx.msg.from_id in location.friend_ids:
-        await ctx.answer(message)
+    await ctx.answer(message)

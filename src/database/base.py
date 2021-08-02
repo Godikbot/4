@@ -80,26 +80,29 @@ class Location:
 
     def __call__(self, *args, **kwargs):
         with open("database.json", encoding='utf-8') as opener_json_format:
-            keys = json.load(opener_json_format)
-            self.token = keys['token']
-            self.deleter_prefixes = keys['deleter_prefixes']
-            self.custom_prefixes = keys['custom_prefixes']
-            self.role_plays_commands = keys['rp_commands']
-            self.notes = keys['triggers_prefixes']
-            self.idm_secret_code = keys['IDM']['secret_code_idm']
-            self.trigger_prefixes = keys['triggers_prefixes']
-            self.idm_signal_prefixes = keys['IDM']['signal_prefixes']
-            self.ignore_list = keys['ignore_list']
-            self.muted_list = keys['muted_list']
-            self.auto_kicked_user = keys['auto_kicked_user']
-            self.friend_ids = keys['friend_ids']
-            self.auto_greeting = keys['auto_greeting']
-            self.auto_leave_chat = keys['auto_commands']["auto_leave_chat"]
-            self.auto_mine = keys['auto_commands']["auto_mine"]
-            self.auto_commands = keys['auto_commands']
-            self.idm = keys['IDM']
-            self.qiwi_key = keys["qiwi_key"] if len(keys["qiwi_key"]) > 0 else "6gs281"
-            self.infestation = keys['infestation']
+            try:
+                keys = json.load(opener_json_format)
+                self.token = keys['token']
+                self.deleter_prefixes = keys['deleter_prefixes']
+                self.custom_prefixes = keys['custom_prefixes']
+                self.role_plays_commands = keys['role_plays_commands']
+                self.notes = keys['notes']
+                self.idm_secret_code = keys['IDM']['secret_code_idm']
+                self.trigger_prefixes = keys['triggers_prefixes']
+                self.idm_signal_prefixes = keys['IDM']['signal_prefixes']
+                self.ignore_list = keys['ignore_list']
+                self.muted_list = keys['muted_list']
+                self.auto_kicked_user = keys['auto_kicked_user']
+                self.friend_ids = keys['friend_ids']
+                self.auto_greeting = keys['auto_greeting']
+                self.auto_leave_chat = keys['auto_commands']["auto_leave_chat"]
+                self.auto_mine = keys['auto_commands']["auto_mine"]
+                self.auto_commands = keys['auto_commands']
+                self.idm = keys['IDM']
+                self.qiwi_key = keys["qiwi_key"] if len(keys["qiwi_key"]) > 0 else "6gs281"
+                self.infestation = keys['infestation']
+            except:
+                ...
 
     @staticmethod
     def add_object_the_database(method: ty.Optional[str], value: ty.Any):

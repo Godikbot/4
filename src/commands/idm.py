@@ -4,6 +4,7 @@ import typing as ty
 import aiohttp
 import vkquick as vq
 
+from src.filters.only_me import OnlyMe
 from src.misc import app
 
 from src.database.base import location
@@ -11,7 +12,7 @@ from src.config import error_sticker, complete_sticker
 from src.filters.error_handler import ErrorHandler
 
 
-@app.command("+идм префикс", invalid_argument_config=ErrorHandler())
+@app.command("+идм префикс", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_prefix_idm(
         new_prefix: str
 ) -> ty.Optional[str]:
@@ -27,7 +28,7 @@ async def add_prefix_idm(
     return f"{complete_sticker} Поставлен новый идм префикс <<{new_prefix}>>"
 
 
-@app.command("-идм префикс", invalid_argument_config=ErrorHandler())
+@app.command("-идм префикс", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_prefix_idm(
         new_prefix: str
 ) -> ty.Optional[str]:
@@ -43,7 +44,7 @@ async def add_prefix_idm(
     return f"{complete_sticker} Удалён идм префикс <<{new_prefix}>>"
 
 
-@app.command("+секретка", invalid_argument_config=ErrorHandler())
+@app.command("+секретка", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def add_secret_code_idm(
         ctx: vq.NewMessage,
         new_secret: ty.Optional[str]) -> None:
@@ -63,7 +64,7 @@ async def add_secret_code_idm(
     location.add_object_the_database(method='IDM', value=idm_sec_code)
 
 
-@app.command(*location.idm_signal_prefixes, prefixes=[''], invalid_argument_config=ErrorHandler())
+@app.command(*location.idm_signal_prefixes, prefixes=[''], invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def call_command_for_idm(
         ctx: vq.NewMessage,
         *,

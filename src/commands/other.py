@@ -3,6 +3,7 @@ import typing as ty
 
 import vkquick as vq
 
+from src.filters.only_me import OnlyMe
 from src.misc import app
 
 from src.database.base import location
@@ -20,7 +21,7 @@ async def messages_send(context: vq.NewMessage,
         await context.answer(text, attachment=attachments)
 
 
-@app.command("спам")
+@app.command("спам", filter=OnlyMe())
 async def spam(ctx: vq.NewMessage, cul: int, time_sleep: float, *, text: str):
     attachments_all = []
     await ctx.msg.extend(ctx.api)
@@ -44,7 +45,7 @@ async def spam(ctx: vq.NewMessage, cul: int, time_sleep: float, *, text: str):
     await ctx.edit(text)
 
 
-@app.command("шаб", invalid_argument_config=ErrorHandler())
+@app.command("шаб", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def get_note(ctx: vq.NewMessage, name: str):
     if name not in [_['name_note'] for _ in location.notes]:
         return f"{error_sticker} У вас нет шаблона <<{name}>>"
@@ -54,7 +55,7 @@ async def get_note(ctx: vq.NewMessage, name: str):
             await ctx.edit(i['message'], attachment=i['attachment'])
 
 
-@app.command("рп", invalid_argument_config=ErrorHandler())
+@app.command("рп", invalid_argument_config=ErrorHandler(), filter=OnlyMe())
 async def role_play_command(ctx: vq.NewMessage,
                             name_role: str,
                             user: vq.User) -> str:
@@ -73,12 +74,12 @@ async def role_play_command(ctx: vq.NewMessage,
         f"{sticker} | {i:@[fullname]} {value_} {user:@[fullname]}")
 
 
-@app.command(".doc location", prefixes=[''])
+@app.command(".doc location", prefixes=[''], filter=OnlyMe())
 async def _():
     return location.__doc__
 
 
-@app.command(".doc startup", prefixes=[''])
+@app.command(".doc startup", prefixes=[''], filter=OnlyMe())
 async def _():
     return """
     Custom startup the Virtual Quarter
@@ -96,7 +97,7 @@ async def _():
     With the condition that you need to close the previous coroutine"""
 
 
-@app.command("инфа")
+@app.command("инфа", filter=OnlyMe())
 async def get_information() -> str:
     text = f'''
 🌀 Успешный стикер: {complete_sticker}
