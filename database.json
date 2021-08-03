@@ -4,9 +4,7 @@
    "infestation": false,
    "deleter_prefixes": {
       "prefixes": [
-         "мур",
-         "123",
-         "дд"
+         "мур"
       ],
       "text_prefixes": "Удаляю сообщения."
    },
@@ -20,7 +18,8 @@
    "ignore_list": [],
    "muted_list": [],
    "auto_kicked_user": [],
-   "friend_ids": [],
+   "friend_ids": [
+   ],
    "auto_greeting": {
       "value": true,
       "text": "Здравствуйте! "
@@ -35,8 +34,10 @@
       "идм "
    ],
    "auto_commands": {
+      "auto_mine": true,
       "auto_leave_chat": false,
-      "auto_mine": false
+      "online": false,
+      "offline": false
    },
    "role_plays_commands": [
       {

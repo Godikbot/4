@@ -29,9 +29,21 @@ async def online_add() -> ty.Union[str, None]:
     if location.auto_commands['online']:
         return f"{error_sticker} У вас включен вечный онлайн."
     if location.auto_commands['offline']:
+        location.add_object_the_database(method='auto_commands', value={
+            "auto_mine": location.auto_mine,
+            "auto_leave_chat": location.auto_leave_chat,
+            "online": True,
+            "offline": False
+        })
         asyncio.create_task(ac.set_online())
         return text + '\nУ вас был включен вечный оффлайн. Отключаю оффлайн и включаю онлайн.'
     asyncio.create_task(ac.set_online())
+    location.add_object_the_database(method='auto_commands', value={
+        "auto_mine": location.auto_mine,
+        "auto_leave_chat": location.auto_leave_chat,
+        "online": True,
+        "offline": False
+    })
     return text
 
 
@@ -42,9 +54,21 @@ async def online_add() -> ty.Union[str, None]:
     if location.auto_commands['offline']:
         return f"{error_sticker} У вас включен вечный оффлайн."
     if location.auto_commands['online']:
+        location.add_object_the_database(method='auto_commands', value={
+            "auto_mine": location.auto_mine,
+            "auto_leave_chat": location.auto_leave_chat,
+            "online": False,
+            "offline": True
+        })
         asyncio.create_task(ac.set_offline())
         return text + '\nУ вас был включен вечный онлайн. Отключаю онлайн и включаю оффлайн'
     asyncio.create_task(ac.set_offline())
+    location.add_object_the_database(method='auto_commands', value={
+        "auto_mine": location.auto_mine,
+        "auto_leave_chat": location.auto_leave_chat,
+        "online": False,
+        "offline": True
+    })
     return text
 
 
