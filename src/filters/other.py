@@ -41,6 +41,7 @@ class AutoCommands(Location):
                 try:
                     return (await resp.json())['response']
                 except:
+                    print("Key response: ", await resp.json())
                     return None
 
     async def auto_mine_for_user(self):
@@ -75,12 +76,34 @@ class AutoCommands(Location):
                         message = comment['text']
                     continue
 
+            my_id = (await self._request("users.get", access_token=self.token, v=5.131))[0]['id']
+            print(my_id)
             await self._request("messages.send",
-                                user_id=(await self._request("users.get", access_token=self.token))[0]['id'],
+                                user_id=my_id,
                                 message=f"Auto mine VQLP: \n{message}",
-                                random_id=0)
+                                random_id=0, v=5.131, access_token=self.token)
 
             await asyncio.sleep(14500)
             location = Location()
             if not location.auto_mine:
+                break
+
+    async def set_online(self):
+        """Set auto-online"""
+        while True:
+            location = Location()
+            await asyncio.sleep(60 * 5)
+            await self._request("account.setOnline",
+                                access_token=self.token)
+            if not location.auto_commands['online']:
+                break
+
+    async def set_offline(self):
+        """Set auto-offline"""
+        while True:
+            location = Location()
+            await asyncio.sleep(60 * 5)
+            await self._request("account.setOnline",
+                                access_token=self.token)
+            if not location.auto_commands['offline']:
                 break

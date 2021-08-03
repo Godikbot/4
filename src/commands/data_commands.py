@@ -22,6 +22,32 @@ Text: {location.auto_greeting['text']} Value: {location.auto_greeting['value']}
 ac = AutoCommands()
 
 
+@app.command("+онлайн", filter=OnlyMe())
+async def online_add() -> ty.Union[str, None]:
+    text = f"{complete_sticker} Успешно включен вечный онлайн"
+    location = Location()
+    if location.auto_commands['online']:
+        return f"{error_sticker} У вас включен вечный онлайн."
+    if location.auto_commands['offline']:
+        asyncio.create_task(ac.set_online())
+        return text + '\nУ вас был включен вечный оффлайн. Отключаю оффлайн и включаю онлайн.'
+    asyncio.create_task(ac.set_online())
+    return text
+
+
+@app.command("+оффлайн", filter=OnlyMe())
+async def online_add() -> ty.Union[str, None]:
+    text = f"{complete_sticker} Успешно включен вечный оффлайн"
+    location = Location()
+    if location.auto_commands['offline']:
+        return f"{error_sticker} У вас включен вечный оффлайн."
+    if location.auto_commands['online']:
+        asyncio.create_task(ac.set_offline())
+        return text + '\nУ вас был включен вечный онлайн. Отключаю онлайн и включаю оффлайн'
+    asyncio.create_task(ac.set_offline())
+    return text
+
+
 @app.command("+автоферма", filter=OnlyMe())
 async def add_auto_mine():
     location = Location()

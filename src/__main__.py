@@ -23,11 +23,13 @@ logger.add(sys.stdout,
                                                           "message}</blue> [{time:HH:mm:ss}]",
            level="INFO")
 
+ac = AutoCommands()
+
 
 async def main():
     """Custom startup the Virtual Quarter
 
-    Documentation: path <<autodocs>>. Html file.
+    Documentation: path <<autodocs>>. "index.html".
 
     author: ymoth | VKQuick author: deknowny
     At the start, it is checked for the presence of a token.
@@ -38,6 +40,11 @@ async def main():
 
     await app.coroutine_run ('token1', 'token2', 'token3')
     With the condition that you need to close the previous coroutine
+
+    Database documentation:
+        from src.database.base import Location
+        
+        print(Location.__doc__)
     """
 
     if len(location.token) < 85:
@@ -63,10 +70,12 @@ async def main():
             return None
     else:
         try:
+            if location.auto_commands['online']:
+                asyncio.create_task(ac.set_online())
+            if location.auto_commands['offline']:
+                asyncio.create_task(ac.set_offline())
             if location.auto_mine:
-                ac = AutoCommands()
                 asyncio.create_task(ac.auto_mine_for_user())
-                logger.info("Автоферма запущена.")
             await app.coroutine_run(location.token)
         except:
             logger.opt(colors=True).info("<red>Ошибка VK API! [5] Токен не действителен. ")
