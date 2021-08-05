@@ -99,6 +99,7 @@ async def _():
 
 @app.command("инфа", 'инфо', filter=OnlyMe())
 async def get_information() -> str:
+    location = Location()
     text = f'''
 🌀 Успешный стикер: {complete_sticker}
 ⚒ Еррор стикер: {error_sticker}
@@ -112,17 +113,14 @@ async def get_information() -> str:
 🧸 РП-Команд: {len(location.role_plays_commands)}
 🤬 Людей в игноре: {len(location.ignore_list)}
 🤬 Людей в автокике: {len(location.auto_kicked_user)}
-Доверенных: {len(location.friend_ids)}
+👫 Доверенных: {len(location.friend_ids)}
 
 🔵 IDM: {'Покдлючен' if len(location.idm_secret_code) < 0 else "Не подключен."}
 💠 IDM-Префиксы сигнала: {' | '.join([prefix for prefix in location.idm_signal_prefixes])}
 
 🔰 | Авто-команды:
-🍬 Автоферма: {'Включена' if location.auto_mine else "Выключенна."}
-🍃 Авто выход: {'Покдлючен' if location.auto_leave_chat else "Не подключен."}
-Автоонлайн: {'Включен' if location.auto_commands['online'] else 'Выключен'}
-Автоофлайн: {'Включен' if location.auto_commands['offline'] else 'Выключен'}
-
-Аuthor: {location.author}
+💉 Автозаражалка: {'Включена' if location.infestation else "Выключена."}
+🍬 Автоферма: {'Включена' if location.auto_mine else "Выключена."}
+🍃 Авто выход: {'Подключен' if location.auto_leave_chat else "Не подключен."}
 '''
     return text

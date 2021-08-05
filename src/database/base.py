@@ -3,7 +3,6 @@ import typing as ty
 
 
 class Location:
-
     """Использование базы данных. Советую пересоздавать класс в функции
     Конфигурация происходит из json формата под "database.json"
     Можно в ручную изменять данные в джсоне, к примеру <custom_prefixes>
@@ -31,6 +30,7 @@ class Location:
     """
 
     notes: ty.List[dict]  # [{"name": "", "text": ""}]
+    voice_notes: ty.List[ty.Dict]
     token: ty.Union[list, str]
     deleter_prefixes: ty.Dict[list, str]
     custom_prefixes: ty.List[str]
@@ -75,6 +75,7 @@ class Location:
                 self.idm = keys['IDM']
                 self.qiwi_key = keys["qiwi_key"] if len(keys["qiwi_key"]) > 0 else "6gs281"
                 self.infestation = keys['infestation']
+                self.voice_notes = keys['voice_notes']
             except:
                 ...
 
