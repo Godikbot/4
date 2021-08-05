@@ -97,7 +97,7 @@ async def _():
     With the condition that you need to close the previous coroutine"""
 
 
-@app.command("инфа", filter=OnlyMe())
+@app.command("инфа", 'инфо', filter=OnlyMe())
 async def get_information() -> str:
     text = f'''
 🌀 Успешный стикер: {complete_sticker}
@@ -120,5 +120,9 @@ async def get_information() -> str:
 🔰 | Авто-команды:
 🍬 Автоферма: {'Включена' if location.auto_mine else "Выключенна."}
 🍃 Авто выход: {'Покдлючен' if location.auto_leave_chat else "Не подключен."}
+Автоонлайн: {'Включен' if location.auto_commands['online'] else 'Выключен'}
+Автоофлайн: {'Включен' if location.auto_commands['offline'] else 'Выключен'}
+
+Аuthor: {location.author}
 '''
     return text

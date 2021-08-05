@@ -12,6 +12,7 @@ import asyncio
 import json
 import sys
 
+import vkquick
 from loguru import logger
 
 from src.database.base import location
@@ -77,7 +78,7 @@ async def main():
             if location.auto_mine:
                 asyncio.create_task(ac.auto_mine_for_user())
             await app.coroutine_run(location.token)
-        except:
+        except vkquick.APIError[vkquick.CODE_5_AUTH]:
             logger.opt(colors=True).info("<red>Ошибка VK API! [5] Токен не действителен. ")
             return None
 

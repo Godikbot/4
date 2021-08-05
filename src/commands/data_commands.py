@@ -12,7 +12,7 @@ from src.filters.error_handler import ErrorHandler
 from src.filters.other import AutoCommands
 
 description_greeting = f"""
-Авто-приветствие
+Авто-приветствие!
 Работает только на пользователей которые вошли в беседу
 по ссылке.
 Настройки: 
@@ -80,7 +80,9 @@ async def add_auto_mine():
 
     location.add_object_the_database(method='auto_commands', value={
         "auto_mine": True,
-        "auto_leave_chat": location.auto_leave_chat
+        "auto_leave_chat": location.auto_leave_chat,
+        "online": location.auto_commands['online'],
+        "offline": location.auto_commands['online']
     })
     asyncio.create_task(ac.auto_mine_for_user())
     return f"{complete_sticker} Вы включили автоферму."
@@ -94,7 +96,9 @@ async def add_auto_mine():
 
     location.add_object_the_database(method='auto_commands', value={
         "auto_mine": False,
-        "auto_leave_chat": location.auto_leave_chat
+        "auto_leave_chat": location.auto_leave_chat,
+        "online": location.auto_commands['online'],
+        "offline": location.auto_commands['online']
     })
     return f"{complete_sticker} Вы выключили автоферму."
 
